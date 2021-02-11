@@ -7,8 +7,14 @@ import java.util.Collections;
 import java.util.List;
 
 public class StringMode {
-    static ArrayList<String[]> strings;
+    static ArrayList<String[]> strings = new ArrayList<>(); // Основной лист, в котором будут храниться массивы строк из файлов
 
+    /**
+     * Метод, в котором находится логика сортировки слиянием. Принимает на вход два предварительно
+     * отсортированных массива строк
+     *
+     * @return один общий массив, отсортированный по длине строки в зависимости от флага ascending
+     */
     public static String[] sortStringArraysByLength(String[] a1, String[] a2) {
         String[] a3 = new String[a1.length + a2.length];
         int a1Pos = 0, a2Pos = 0, a3Pos = 0;
@@ -22,7 +28,7 @@ public class StringMode {
                 a3[a3Pos++] = a1[a1Pos].length() > a2[a2Pos].length() ? a1[a1Pos++] : a2[a2Pos++];
             }
         }
-        //проверяем остались ли элементы в каком-то из массивов и, если да, то дописываем что осталось
+        // проверяем остались ли элементы в каком-то из массивов и, если да, то дописываем что осталось
         if (a1Pos < a1.length) {
             System.arraycopy(a1, a1Pos, a3, a3Pos, a1.length - a1Pos);
         } else if (a2Pos < a2.length) {
@@ -32,11 +38,14 @@ public class StringMode {
         return a3;
     }
 
+    /**
+     * Основной метод, в котором находится вся логика обработки для строк.
+     *
+     * @return итоговый лист со всеми итоговыми данными
+     */
     public static List<String> mergeString(String[] inFiles) {
-        strings = new ArrayList<>();
-        String[] arrayFromFile;
         for (String filename : inFiles) {
-            arrayFromFile = readStringDataFromFile(filename);
+            String[] arrayFromFile = readStringDataFromFile(filename);
             if (arrayFromFile != null)
                 strings.add(checkLengthSorting(arrayFromFile, filename));
         }
@@ -127,6 +136,12 @@ public class StringMode {
         return tempList.toArray(new String[0]);
     }
 
+    /**
+     * Метод записывает результат в файл, каждый элемент с новой строки
+     *
+     * @param result итоговый лист, который будем записывать в файл
+     * @param outFile собственно сам выходной файл
+     */
     public static void writeStringResult(List<String> result, String outFile) {
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile)))) {
             for (String s : result) {
@@ -137,6 +152,10 @@ public class StringMode {
         }
     }
 
+    /**
+     * @param filename Имя файла из которого будем читать строки
+     * @return массив строк, сформированный из файла
+     */
     public static String[] readStringDataFromFile(String filename) {
         if (filename == null)
             return null;

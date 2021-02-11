@@ -5,8 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IntMode {
-    static ArrayList<int[]> ints;
+    static List<int[]> ints = new ArrayList<>(); // Основной лист, в котором будут храниться массивы чисел из файлов
 
+    /**
+     * Метод, в котором находится логика сортировки слиянием. Принимает на вход два предварительно
+     * отсортированных массива чисел
+     *
+     * @return один общий массив, отсортированный в зависимости от флага ascending
+     */
     public static int[] sortIntArrays(int[] a1, int[] a2) {
         int[] a3 = new int[a1.length + a2.length];
         int a1Pos = 0, a2Pos = 0, a3Pos = 0;
@@ -20,6 +26,7 @@ public class IntMode {
                 a3[a3Pos++] = a1[a1Pos] > a2[a2Pos] ? a1[a1Pos++] : a2[a2Pos++];
             }
         }
+        // проверяем остались ли элементы в каком-то из массивов и, если да, то дописываем что осталось
         if (a1Pos < a1.length) {
             System.arraycopy(a1, a1Pos, a3, a3Pos, a1.length - a1Pos);
         } else if (a2Pos < a2.length) {
@@ -29,17 +36,21 @@ public class IntMode {
         return a3;
     }
 
+    /**
+     * Основной метод, в котором находится вся логика обработки для чисел.
+     *
+     * @return итоговый лист со всеми итоговыми данными
+     */
     public static List<Integer> mergeInt(String[] inFiles) {
-        ints = new ArrayList<>();
-        int[] arrayFromFile;
+        // проходимся в цикле по всем входным файлам
         for (String filename : inFiles) {
-            arrayFromFile = readIntDataFromFile(filename);
+            int[] arrayFromFile = readIntDataFromFile(filename); // читаем данные из файла в массив
             if (arrayFromFile != null)
-                ints.add(checkSorting(arrayFromFile, filename));
+                ints.add(checkSorting(arrayFromFile, filename)); // проверяем на предварительную сортировку и добавляем в основной лист
         }
 
-        List<Integer> result = new ArrayList<>();
-        for (int j : ints.get(0)) {
+        List<Integer> result = new ArrayList<>(); // итоговый лист, который в конце будем возвращать
+        for (int j : ints.get(0)) { // заполняем его данными из самого первого файла
             result.add(j);
         }
 
@@ -127,6 +138,12 @@ public class IntMode {
         return tempList.stream().mapToInt(integer -> integer).toArray();
     }
 
+    /**
+     * Метод записывает результат в файл, каждый элемент с новой строки
+     *
+     * @param result итоговый лист, который будем записывать в файл
+     * @param outFile собственно сам выходной файл
+     */
     public static void writeIntResult(List<Integer> result, String outFile) {
         try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile)))) {
             for (Integer integer : result) {
@@ -137,6 +154,10 @@ public class IntMode {
         }
     }
 
+    /**
+     * @param filename Имя файла из которого будем читать числа
+     * @return массив чисел, сформированный из файла
+     */
     public static int[] readIntDataFromFile(String filename) {
         if (filename == null)
             return null;
