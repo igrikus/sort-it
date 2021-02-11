@@ -76,7 +76,7 @@ public class Main {
             try {
                 Files.createFile(path);
             } catch (IOException e) {
-                System.out.println("Ошибка при создании файла для вывода. Проверьте правильность введеного пути");
+                System.out.println("Ошибка при создании файла для вывода. Проверьте правильность введённого пути");
             }
         }
     }
