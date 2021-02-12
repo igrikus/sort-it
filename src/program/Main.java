@@ -6,8 +6,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-import static program.IntMode.*;
-import static program.StringMode.*;
 
 public class Main {
     private static boolean ascending; //флаг, отвечающий за режим сортировки (по возрастанию или по убыванию)
@@ -33,9 +31,9 @@ public class Main {
         checkOrCreateOutPath(outFile);
 
         if (isIntMode(args)) {
-            writeIntResult(mergeInt(inFiles), outFile);
+            IntMode.writeIntResult(IntMode.mergeInt(inFiles), outFile);
         } else if (isStringMode(args)) {
-            writeStringResult(mergeString(inFiles), outFile);
+            StringMode.writeStringResult(StringMode.mergeString(inFiles), outFile);
         } else {
             System.out.println("Не задан режим сортировки");
             return;
